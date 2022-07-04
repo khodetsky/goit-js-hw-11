@@ -1,0 +1,76 @@
+html {
+    box-sizing: border-box;
+}
+
+*,
+*::after,
+*::before {
+    box-sizing: inherit;
+}
+
+ul {
+    list-style: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+}
+
+body {
+    font-family: Roboto, sans-serif;
+    letter-spacing: 0.03em;
+}
+
+.search-form {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0 10px 0;
+    background-color: rgb(106, 48, 160);
+}
+
+.search-form .search-form-input {
+    margin-right: 20px;
+}
+
+.gallery {
+    display: inline-flex;
+    flex-wrap: wrap;
+
+    padding-top: 10px;
+    background-color:rgb(131, 0, 253);
+    font-size: 13px;
+}
+
+.gallery .photo-card {
+    padding-right: 10px;
+    padding-bottom: 10px;
+    width: 25%;
+}
+
+.gallery .photo-card:nth-child(4n) {
+padding-right: 0;
+}
+
+.photo-card img {
+    object-fit: cover;
+    width: 100%;
+    height: 160px;
+}
+.info {
+    display: flex;
+    justify-content: space-around;
+}
+.info .info-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
