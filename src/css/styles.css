@@ -30,6 +30,7 @@ body {
     letter-spacing: 0.03em;
 }
 
+
 .search-form {
     display: flex;
     justify-content: center;
@@ -73,4 +74,12 @@ padding-right: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.load-more {
+    background-color: rgb(106, 48, 160);
+    margin-left: calc(100% / 2);
+    margin-top: 10px;
+    padding: 5px 10px;
+    border-radius: 10px;
 }
