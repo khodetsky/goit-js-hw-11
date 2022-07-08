@@ -109,3 +109,15 @@ padding-right: 0;
     transform: translateX(-50%);
     background-color: rgb(106, 48, 160);
 }
+
+.to-top-button {
+    position: fixed;
+    right: 30px;
+    bottom: 40px;
+
+    display: inline-block;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    font-size: 20px;
+}
