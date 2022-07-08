@@ -15,10 +15,12 @@ const form = document.querySelector('#search-form');
 const gallery = document.querySelector(".gallery");
 const loadMoreBtn = document.querySelector(".load-more");
 const toTopBtn = document.querySelector(".to-top-button");
+
 document.querySelector(".load-more").hidden = true;
+document.querySelector(".to-top-button").hidden = true;
 
 let page = '';
-let lightbox;
+// let lightbox;
 
 function onFormSubmit(evt) {
     evt.preventDefault();
@@ -53,7 +55,7 @@ function onFormSubmit(evt) {
         .then((response) => {
             gallery.innerHTML = "";
             gallery.insertAdjacentHTML("beforeend", cardsMarcup(response));
-            lightbox = new SimpleLightbox('.gallery a', { captionsData: 'alt', captionDelay: 250});
+            var lightbox = new SimpleLightbox('.gallery a', { captionsData: 'alt', captionDelay: 250});
             
         })
         .catch(() => { });
@@ -90,15 +92,26 @@ function onLoadMore() {
             }); 
         })
         .catch(() => { });
+};
+
+function toTopBtnHidden() {
+    if (window.scrollY) {
+        document.querySelector(".to-top-button").hidden = false;
+    }
 }
 
 function onToTopBtnClick() {
-    window.scroll({
-        top: 0,
-        behavior: "smooth",
-    });
-}
+    setTimeout(() => {
+    return document.querySelector(".to-top-button").hidden = true;
+    }, 1000);
 
+    window.scroll({
+    top: 0,
+    behavior: "smooth",
+    });    
+};
+
+window.addEventListener('scroll', toTopBtnHidden)
 form.addEventListener('submit', onFormSubmit);
 loadMoreBtn.addEventListener('click', onLoadMore);
 toTopBtn.addEventListener('click', onToTopBtnClick)
