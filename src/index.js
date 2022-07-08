@@ -1,20 +1,23 @@
 import './css/styles.css';
 import Notiflix from 'notiflix';
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
 
 import { getUser } from './getUser';
+import { cardsMarcup, endOfContentMcp } from './marcup';
 
 const axios = require('axios').default;
 
 const PIXABEY_KEY = '28393009-563cada9a4af8f72bfd4d9668';
 const BASE_HTTP = 'https://pixabay.com/api/';
 
-// const submitBtn = document.querySelector('#submit-button');
 const form = document.querySelector('#search-form');
 const gallery = document.querySelector(".gallery");
 const loadMoreBtn = document.querySelector(".load-more");
 document.querySelector(".load-more").hidden = true;
 
 let page = '';
+let lightbox;
 
 function onFormSubmit(evt) {
     evt.preventDefault();
@@ -22,53 +25,38 @@ function onFormSubmit(evt) {
     localStorage.setItem("inputValue", `${this.searchQuery.value}`);
     document.querySelector(".load-more").hidden = true;
 
+    if (document.querySelector(".end-of-content")) {
+        const endOfContentMsg = document.querySelector(".end-of-content");
+        endOfContentMsg.remove();
+    };
+
     getUser(this.searchQuery.value, page)
         .then(response => {
-            
-            if (response.data.total === 0) {
+            if (response.data.totalHits === 0) {
             Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
                 return;
-            }
-           
+            } else {
+                if (response.data.totalHits < 40 ) {
+                    document.querySelector(".load-more").hidden = true;
+                    console.log('form');
+                    loadMoreBtn.insertAdjacentHTML("afterend", endOfContentMcp());
+                } else {
+                    document.querySelector(".load-more").hidden = false;
+                }
+
+            Notiflix.Notify.success(`Hooray! We found ${response.data.totalHits} images.`)
             return response.data.hits;
+            }
+            
         })
         .then((response) => {
             gallery.innerHTML = "";
             gallery.insertAdjacentHTML("beforeend", cardsMarcup(response));
-            document.querySelector(".load-more").hidden = false;
+            lightbox = new SimpleLightbox('.gallery a', { captionsData: 'alt', captionDelay: 250});
             
         })
         .catch(() => { });
 };
-
-
-function cardsMarcup(cards) {
-    const marcup = cards.map(card => {
-        return `
-        <li class="photo-card">
-          <img src="${card.webformatURL}" alt="${card.tags}" loading="lazy" />
-          <ul class="info">
-            <li class="info-item">
-              <b>Likes</b> ${card.likes}</p>
-            </li>
-            <li class="info-item">
-              <b>Views</b> <p> ${card.views}</p>
-            </li>
-            <li class="info-item">
-              <b>Comments</b> <p> ${card.comments}</p>
-            </li>
-            <li class="info-item">
-              <b>Downloads</b> <p> ${card.downloads}</p>
-            </li>
-          </ul>
-        </li>`
-    }).join("");
-return marcup;
-};
-
-function endOfContentMcp() {
-    return "<p class ='search-form'>We're sorry, but you've reached the end of search results.</p>"
-}
 
 function onLoadMore() {
     page += 1;
@@ -76,11 +64,15 @@ function onLoadMore() {
 
     getUser(inputValue, page)
         .then(response => {
-            if (page * 40 >= response.data.totalHits) {
-                document.querySelector(".load-more").hidden = true;
-                document.body.insertAdjacentHTML("beforeend", endOfContentMcp());
+            if (response.data.totalHits !== 0) {
+                if (page * 40 >= response.data.totalHits) {
+                    document.querySelector(".load-more").hidden = true;
+                    console.log('button');
+                loadMoreBtn.insertAdjacentHTML("afterend", endOfContentMcp());
+                }
+                return response.data.hits;
             }
-            return response.data.hits;
+            
         })
         .then((response) => {
             gallery.insertAdjacentHTML("beforeend", cardsMarcup(response));
