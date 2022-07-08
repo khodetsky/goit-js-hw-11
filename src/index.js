@@ -14,6 +14,7 @@ const BASE_HTTP = 'https://pixabay.com/api/';
 const form = document.querySelector('#search-form');
 const gallery = document.querySelector(".gallery");
 const loadMoreBtn = document.querySelector(".load-more");
+const toTopBtn = document.querySelector(".to-top-button");
 document.querySelector(".load-more").hidden = true;
 
 let page = '';
@@ -91,5 +92,13 @@ function onLoadMore() {
         .catch(() => { });
 }
 
+function onToTopBtnClick() {
+    window.scroll({
+        top: 0,
+        behavior: "smooth",
+    });
+}
+
 form.addEventListener('submit', onFormSubmit);
 loadMoreBtn.addEventListener('click', onLoadMore);
+toTopBtn.addEventListener('click', onToTopBtnClick)
