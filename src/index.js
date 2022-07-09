@@ -70,7 +70,6 @@ function onLoadMore() {
             if (response.data.totalHits !== 0) {
                 if (page * 40 >= response.data.totalHits) {
                     document.querySelector(".load-more").hidden = true;
-                    console.log('button');
                 loadMoreBtn.insertAdjacentHTML("afterend", endOfContentMcp());
                 }
                 return response.data.hits;
@@ -79,6 +78,7 @@ function onLoadMore() {
         })
         .then((response) => {
             gallery.insertAdjacentHTML("beforeend", cardsMarcup(response));
+            var lightboxSecond = new SimpleLightbox('.gallery a', { captionsData: 'alt', captionDelay: 250});
             
         }).then(() => {
             const cardHeight = document
